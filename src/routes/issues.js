@@ -3,13 +3,17 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  //res.send('respond with a resource');
-  GetIssuesForReposAsync().then(function(issueList){
+    
+  getSecretAsync().then(function(secret){
+      github.authenticate({
+            type:"token",
+            token:secret
+        });       
+    GetIssuesForReposAsync().then(function(issueList){
      res.json({data: issueList});
-    //  res.render('issues', {
-    //      title : 'Issues', 
-    //      issues: issueList
-    //       });
+    });
+  }).catch(function(err){
+     res.send("Error getting secret."); 
   });
 });
 
@@ -43,10 +47,7 @@ var importantLabels =
         'Perf'
     ];   
 
-github.authenticate({
-    type:"token",
-    token:""
-});
+
 
 
 var repoPromise = Promise.defer();
@@ -140,6 +141,26 @@ function DrainIssues(err, res,repo, issueDefer, issueList)
         }                                 
     }            
 }    
+
+/* 
+ Read the oauth token from .secret
+*/
+function getSecretAsync() {
+    var fs = require('fs')
+    var path = require('path');
+    var readDefer = Promise.defer();
+    var filePath = path.join(__dirname, '.secret');
+    fs.readFile(filePath, 'utf8', function (err,data) {
+    if (err) {
+        readDefer.reject(err);
+        return console.log(err);
+    }
+    //console.log(data);
+        readDefer.resolve(data);
+    });
+    
+    return readDefer.promise;
+}
 
 
 module.exports = router;
