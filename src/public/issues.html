@@ -1,12 +1,14 @@
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/datetime-moment.js"></script>
 
 </head>
 <body>    
@@ -18,7 +20,9 @@
                 <th>Title</th>
                 <th>URL</th>
                 <th>Assigned To</th>
+                <th>Milestone</th>
                 <th>Labels</th>
+                <th>Updated</th>
             </tr>
         </thead>
     </table>
@@ -26,6 +30,7 @@
     
 <script>
     $(document).ready(function() {
+    $.fn.dataTable.moment();    
     $('#example').DataTable( {        
         "ajax": "/issues",
          columns: [
@@ -33,16 +38,22 @@
             { "data": "title" },
             { "data": "url",
               "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                    $(nTd).html("<a href='tel:"+oData.url+"'>"+oData.number+"</a>");
+                    $(nTd).html("<a target='_blank' href='"+oData.url+"'>"+oData.number+"</a>");
               }
             },                        
-            { "data": "user" },
+            { "data": "assignee" },
+            { "data": "milestone" },            
             { "data": "labels",
               "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                   for(var index = 0; index < oData.labels.length; index++)
                     $(nTd).html("<p>" + oData.labels[index]+ "</p>");
               }
-            },   
+            },
+            {"data": "updated_at",
+               "fnCreatedCell": function (nTd, sData, oData, iRow, iCol){
+                   $(nTd).html("<span>" + moment(oData.updated_at).format("MM-D-YY") + "</span>");
+               }
+            }   
          ]
     } ).columnFilter();
 });

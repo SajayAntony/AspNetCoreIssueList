@@ -98,14 +98,17 @@ function DrainIssues(err, res,repo, issueDefer, issueList)
                 element.labels.forEach(function(issue_label) {
                     labels.push(issue_label.name)
                 }, this);
+                
                 issueList.push({
                     repo: repo,
                     id:element.id,
                     title : element.title,
-                    user : element.user.login,
+                    assignee : (element.assignee != null ? element.assignee.login : element.user.login),
                     labels : labels, 
                     url : element.html_url,
-                    number : element.number
+                    number : element.number,
+                    updated_at: element.updated_at,
+                    milestone : (element.milestone != null ? element.milestone.title : '-')
                 });
             });
         }
