@@ -103,7 +103,7 @@ function DrainIssues(err, res,repo, issueDefer, issueList)
                     repo: repo,
                     id:element.id,
                     title : element.title,
-                    assignee : (element.assignee != null ? element.assignee.login : element.user.login),
+                    assignee : (element.assignee != null ? element.assignee.login : 'unassigned'),
                     labels : labels, 
                     url : element.html_url,
                     number : element.number,

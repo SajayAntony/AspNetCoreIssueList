@@ -1,38 +1,66 @@
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/datetime-moment.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/datetime-moment.js"></script>
 
+    <style>
+        body {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        
+        .navbar {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
-<body>    
+
+<body>
     <div class="container">
-    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Repo</th>
-                <th>Title</th>
-                <th>URL</th>
-                <th>Assigned To</th>
-                <th>Milestone</th>
-                <th>Labels</th>
-                <th>Updated</th>
-            </tr>
-        </thead>
-    </table>
+        <nav class="navbar navbar-default">
+            <div class="navbar-form">
+                <div class="form-group">
+                    <div class="input-group" style="display:table;">
+                        <span class="input-group-btn" data-toggle="buttons" style="width: 1%;">
+                          <label class="btn btn-default">
+                             <input type="checkbox" autocomplete="off" id="global_regex"><code>(*.)</code>
+                        </label>                       
+                        </span>
+                        <input type="text" class="form-control global_filter" placeholder="Search" class="" id="global_filter" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Repo</th>
+                    <th>Title</th>
+                    <th>URL</th>
+                    <th>Assigned To</th>
+                    <th>Milestone</th>
+                    <th>Labels</th>
+                    <th>Updated</th>
+                </tr>
+            </thead>
+        </table>
     </div>
-    
-<script>
-    $(document).ready(function() {
+
+    <script>
+        $(document).ready(function() {
     $.fn.dataTable.moment();    
     $('#example').DataTable( {        
-        "ajax": "/issues",
+        "ajax": "/issues",    
+        "sDom" :'<"H"lr>t<"F"ip>',  
          columns: [
             { "data": "repo" },
             { "data": "title" },
@@ -57,5 +85,17 @@
          ]
     } ).columnFilter();
 });
-</script>
+
+function filterGlobal () {
+    $('#example').DataTable().search(
+        $('#global_filter').val(),
+        $('#global_regex').prop('checked'),
+        !$('#global_regex').is(':checked')
+    ).draw();
+}
+
+    $('input.global_filter').on( 'keyup click', function () {
+        filterGlobal();
+    } );
+    </script>
 </body>
