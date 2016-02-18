@@ -73,8 +73,22 @@
 "Options",
 "SqlClient"
     ],
+    
     "labels" : [
         "Stress",
         "Perf"
-    ]
+    ],
+    
+    "perfteam" : [
+            "Nathana1",
+            "yuwaMSFT",
+            "mnltejaswini", 
+            "shhsu", 
+            "taoliseki", 
+            "mconnew",
+            "dayu78080",
+            "sivagms",
+            "DavidObando", 
+            "Sajayantony"
+         ]
 }
