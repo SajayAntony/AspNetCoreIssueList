@@ -1,0 +1,13 @@
+{
+    "user" : "aspnet",
+    "repos" : [
+        "kestrelhttpserver",
+        "mvc",
+        "performance",
+        "reliability"
+    ],
+    "labels" : [
+        "Stress",
+        "Perf"
+    ]
+}

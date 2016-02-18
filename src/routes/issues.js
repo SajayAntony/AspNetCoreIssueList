@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var config = require('../config.json')
 /* GET users listing. */
 router.get('/', function(req, res, next) {
     
@@ -33,25 +33,6 @@ var github = new GitHubApi({
     }
 });
 
-var orgId = 'aspnet';
-var importantRepos = 
-    [        
-        'kestrelhttpserver',
-        'mvc', 
-        'performance', 
-        'reliability'
-    ];
-var importantLabels = 
-    [
-        'Stress',
-        'Perf'
-    ];   
-
-
-
-
-var repoPromise = Promise.defer();
-
 /*
     Iterate through the repos and dump out the issues for each label.
 */
@@ -59,9 +40,9 @@ function GetIssuesForReposAsync(res){
        var completedFetchPromise = Promise.defer(); 
        var promises = new Array();
        var completeIssueList = new Array();
-        importantLabels.forEach(function(label) {
-            importantRepos.forEach(function(repo,i) {
-                var issuesPromise = GetIssuesAsync(orgId,repo,label);
+        config.labels.forEach(function(label) {
+            config.repos.forEach(function(repo,i) {
+                var issuesPromise = GetIssuesAsync(config.user,repo,label);
                 var pending = Promise.defer();
                 promises.push(pending.promise)
                 issuesPromise.then(function(issues)
