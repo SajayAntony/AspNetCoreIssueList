@@ -1,7 +1,8 @@
 {
     "user" : "aspnet",
     "repos" : [
-"Reliability",        
+"Reliability",    
+"Performance",    
 "benchmarks",
 "aspnet-docker",
 "aspnet-win-docker",
