@@ -81,7 +81,19 @@ var getIssuesWithLabelsCoreAsync = function (owner, repos, labels, users) {
         }, this);
     }, this);
 
-    SerializeGetIssuesAsync(queryList, completeIssueList, completedFetchPromise);
+    var allTasks = new Array();
+    for (var index = 0; index < 5; index++) {
+       var task  = Promise.defer();
+       allTasks.push(task.promise);
+       SerializeGetIssuesAsync(queryList, completeIssueList, task);
+    }
+    
+    Promise.all(allTasks).then(function(){
+        completedFetchPromise.resolve(completeIssueList)
+    }).catch(function(err){
+        completedFetchPromise.reject(err);
+    });
+    
     return completedFetchPromise.promise;
 };
 
