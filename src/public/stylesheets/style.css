@@ -5,3 +5,7 @@ body {
 a {
   color: #00B7FF;
 }
+
+.label-as-badge {
+    border-radius: 1em;
+}

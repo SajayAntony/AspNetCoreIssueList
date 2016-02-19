@@ -1,7 +1,8 @@
 div(ng-repeat='item in data')
     div.panel.panel-default
         div.panel-heading 
-            h3.panel-title {{item.assignee}}
+            h3.panel-title {{item.assignee}} 
+                span.label.label-warning.label-as-badge  {{item.issues.length}}
         table(ng-if='item.issues').table.table-condensed 
             thead
                tr
@@ -17,3 +18,4 @@ div(ng-repeat='item in data')
                 td {{issue.title}}
                 td {{issue.milestone}}
                 td {{issue.updated_at}}
+    br
