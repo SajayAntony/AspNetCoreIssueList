@@ -33,14 +33,14 @@ router.get('/user', function(req, res)
    cache.getKeyAsync(cacheKey)
    .then(function(cachedValue)
    {
-       //if(cachedValue == null)
+       if(cachedValue == null)
        { 
             var users = config.teamMembers;
             var repos = config.repos;
             
-            users = ['sajayantony','mnltejaswini'];
-            repos = ['Performance', 'Coherence-Signed'];
-            
+            // Uncomment the following for debugging.
+            // users = ['sajayantony','mnltejaswini'];
+            // repos = ['Performance', 'Coherence-Signed'];            
             
             //initially create the map without any key
             var map = {};
