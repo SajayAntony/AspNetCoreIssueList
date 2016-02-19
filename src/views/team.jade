@@ -1,9 +1,9 @@
 extends layout
 
 block body
-  div.container
-    h1 Perf Team Issues
-  
+  div.container(ng-app="myApp")
+    h3 Perf Team Issues
+    hr
     div(ng-view)
 
   script(src='/scripts/angular/angular.js')

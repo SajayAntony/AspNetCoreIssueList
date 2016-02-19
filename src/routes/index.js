@@ -5,7 +5,7 @@ var fs = require('fs')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var filePath = path.join(__dirname, '../views/issues.html')
+  var filePath = path.join(__dirname, '../views/index.html')
   if (fs.existsSync(filePath))
     {
         res.sendfile(filePath);
