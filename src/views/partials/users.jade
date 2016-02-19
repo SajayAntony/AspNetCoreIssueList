@@ -1,0 +1,19 @@
+div(ng-repeat='item in data')
+    div.panel.panel-default
+        div.panel-heading 
+            h3.panel-title {{item.assignee}}
+        table(ng-if='item.issues').table.table-condensed 
+            thead
+               tr
+                th Repo
+                th Link
+                th Title
+                th Milestone
+                th Updated
+            tr(ng-repeat='issue in item.issues')
+                td {{issue.repo}}
+                td 
+                    a(href='{{issue.url}}' target='_blank') {{issue.number}} 
+                td {{issue.title}}
+                td {{issue.milestone}}
+                td {{issue.updated_at}}
