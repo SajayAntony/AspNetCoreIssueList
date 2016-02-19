@@ -28,15 +28,20 @@ router.get('/', function(req, res)
 });
 
 router.get('/user', function(req, res)
-{
+{      
     var cacheKey = 'teamList';
    cache.getKeyAsync(cacheKey)
    .then(function(cachedValue)
    {
-       if(cachedValue == null)
+       //if(cachedValue == null)
        { 
-            //var users = ['sajayantony','mnltejaswini'];
             var users = config.teamMembers;
+            var repos = config.repos;
+            
+            users = ['sajayantony','mnltejaswini'];
+            repos = ['Performance', 'Coherence-Signed'];
+            
+            
             //initially create the map without any key
             var map = {};
 
@@ -48,7 +53,7 @@ router.get('/user', function(req, res)
             }
             
             githubHelper
-                    .GetIssuesForUserAsync(config.user, config.repos, users)
+                    .GetIssuesForUserAsync(config.user, repos, users)
                     .then(function(issueList){
                         issueList.forEach(function(issue){
                             addValueToList(issue.assignee,issue);
