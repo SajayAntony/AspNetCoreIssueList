@@ -87,13 +87,14 @@ var getIssuesWithLabelsCoreAsync = function (owner, repos, labels, users) {
 
 function SerializeGetIssuesAsync(queryList, issueAccumulator, completedPromise) {
 
-    if (queryList.length == 0) {
+    if (queryList.length == 0) {        
         completedPromise.resolve(issueAccumulator);
         return;
     }
 
     var repoOptions = queryList.pop();
-
+    console.log("Items Remaining" + queryList.length + " Current Query"  + JSON.stringify(repoOptions));
+   
     GetIssuesAsync(repoOptions)
         .then(function (issues) {
             for (var index = 0; index < issues.length; index++) {
@@ -102,7 +103,7 @@ function SerializeGetIssuesAsync(queryList, issueAccumulator, completedPromise) 
             SerializeGetIssuesAsync(queryList, issueAccumulator, completedPromise);
         }, this)
         .catch(function(err){
-            completedPromise.reject();
+            completedPromise.reject(err);
         });
 }
 
@@ -122,39 +123,40 @@ function DrainIssues(err, res, repo, issueDefer, issueList) {
     if (err != null) {
         console.log(err);
         console.log(JSON.stringify(res))
-        issueDefer.resolve(err);
+        issueDefer.reject(err);
+        return;
+    }
+
+    if (res.length > 0) {
+        res.forEach(function (element) {
+            var labels = new Array();
+            element.labels.forEach(function (issue_label) {
+                labels.push(issue_label.name)
+            }, this);
+
+            issueList.push({
+                repo: repo,
+                id: element.id,
+                title: element.title,
+                assignee: (element.assignee != null ? element.assignee.login : 'unassigned'),
+                labels: labels,
+                url: element.html_url,
+                number: element.number,
+                updated_at: element.updated_at,
+                milestone: (element.milestone != null ? element.milestone.title : '-')
+            });
+        });
+    }
+
+    if (github.hasNextPage(res)) {
+        github.getNextPage(res, function (err, res) {
+            DrainIssues(err, res, issueDefer, issueList);
+        });
     }
     else {
-        if (res.length > 0) {
-            res.forEach(function (element) {
-                var labels = new Array();
-                element.labels.forEach(function (issue_label) {
-                    labels.push(issue_label.name)
-                }, this);
-
-                issueList.push({
-                    repo: repo,
-                    id: element.id,
-                    title: element.title,
-                    assignee: (element.assignee != null ? element.assignee.login : 'unassigned'),
-                    labels: labels,
-                    url: element.html_url,
-                    number: element.number,
-                    updated_at: element.updated_at,
-                    milestone: (element.milestone != null ? element.milestone.title : '-')
-                });
-            });
-        }
-
-        if (github.hasNextPage(res)) {
-            github.getNextPage(res, function (err, res) {
-                DrainIssues(err, res, issueDefer, issueList);
-            });
-        }
-        else {
-            issueDefer.resolve(issueList);
-        }
+        issueDefer.resolve(issueList);
     }
+
 }
 
 /* 
