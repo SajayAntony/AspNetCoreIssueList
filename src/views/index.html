@@ -76,8 +76,10 @@
             { "data": "milestone" },            
             { "data": "labels",
               "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                  var html=''
                   for(var index = 0; index < oData.labels.length; index++)
-                    $(nTd).html("<p>" + oData.labels[index]+ "</p>");
+                    html = html +  "<span class='label label-default label-xs label-as-badge'>" + oData.labels[index]+ "</span>&nbsp;";
+                  $(nTd).html(html);
               }
             },
             {"data": "updated_at",
