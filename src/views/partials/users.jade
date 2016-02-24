@@ -1,8 +1,14 @@
 div(ng-repeat='item in data')
     div.panel.panel-default
         div.panel-heading 
-            h3.panel-title {{item.assignee}} 
-                span.label.label-warning.label-as-badge  {{item.issues.length}}
+                ul.list-inline
+                    li
+                        h3.panel-title 
+                            strong {{item.assignee}}                             
+                    li
+                        span(ng-if='item.issues').label.label-warning.label-as-badge  {{item.issues.length}}
+                    li
+                        span(ng-if='item.prs').label.label-success.label-as-badge  PR({{item.prs.length}})
         table(ng-if='item.issues').table.table-condensed 
             thead
                tr
@@ -17,5 +23,21 @@ div(ng-repeat='item in data')
                     a(href='{{issue.url}}' target='_blank') {{issue.number}} 
                 td {{issue.title}}
                 td {{issue.milestone}}
+                td {{issue.updated_at}}
+
+        div(ng-if='item.prs' style='background:#fafafa')
+            p(style='padding:5px') PR            
+        table(ng-if='item.prs').table.table-condensed 
+            thead
+               tr
+                th Repo
+                th Link
+                th PR Title
+                th Updated
+            tr(ng-repeat='issue in item.prs')
+                td {{issue.repo}}
+                td 
+                    a(href='{{issue.url}}' target='_blank') {{issue.number}} 
+                td {{issue.title}}
                 td {{issue.updated_at}}
     br

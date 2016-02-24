@@ -60,29 +60,39 @@ var getIssuesWithLabelsCoreAsync = function (owner, repos, labels, users) {
 
     users.forEach(function (user) {
         labels.forEach(function (label) {
-            var repoOptions = {
-                org: owner,
-            };
-
             if (label != null) {
-                repoOptions.q = [
-                    '',
-                    'user:' + owner,
-                    'label:' + label,
-                    'state:open'
-                ].join('+')           
+                queryList.push({
+                    q: [
+                        '',
+                        'user:' + owner,
+                        'label:' + label,
+                        'state:open'
+                    ].join('+')
+                });
             }
 
             if (user != null) {
-                repoOptions.q = [
-                    '',
-                    'user:' + owner,
-                    'assignee:' + user,
-                    'state:open'
-                ].join('+')
+                queryList.push({
+                    type:'issue',
+                    q: [
+                        '',
+                        'user:' + owner,
+                        'assignee:' + user,
+                        'state:open'
+                    ].join('+')
+                });
+                queryList.push({
+                    type:'pr',
+                    q: [
+                        '',
+                        'user:' + owner,
+                        'author:' + user,
+                        'state:open',
+                        'type:pr'
+                    ].join('+')
+                });
             }
 
-            queryList.push(repoOptions);
         }, this);
     }, this);
 
@@ -137,8 +147,7 @@ function GetIssuesAsync(repoOptions) {
         }
 
         var items = res;
-        if(res.items != null && res.items.length > 0)
-        {
+        if (res.items != null && res.items.length > 0) {
             items = res.items;
         }
 
@@ -152,10 +161,12 @@ function GetIssuesAsync(repoOptions) {
 
                 var repoName = element.repository_url.substr(element.repository_url.lastIndexOf("/") + 1);
                 issueList.push({
+                    type:repoOptions.type,
                     repo: repoName,
                     id: element.id,
                     title: element.title,
                     assignee: (element.assignee != null ? element.assignee.login : 'unassigned'),
+                    author : element.user.login,
                     labels: labels,
                     url: element.html_url,
                     number: element.number,
@@ -183,7 +194,7 @@ function GetIssuesAsync(repoOptions) {
         function (err, res) {
             DrainIssues(err, res);
         });
-    
+
     return issueDefer.promise;
 }
 
