@@ -12,7 +12,8 @@ router.get('/', function(req, res)
    .then(function(cachedValue){
        if(cachedValue == null)
        {
-            githubHelper.GetIssuesWithLabelsAsync(config.user, config.repos, config.labels)
+           var repos = config.repos;
+            githubHelper.GetIssuesWithLabelsAsync(config.user, repos, config.labels)
                 .then(function(issueList){
                        cache.putKeyAsync(cacheKey,issueList);
                        res.json({data: issueList}); 
