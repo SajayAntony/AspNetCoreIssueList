@@ -68,15 +68,17 @@ var getIssuesWithLabelsCoreAsync = function (owner, repos, labels, users) {
                 repoOptions.q = [
                     '',
                     'user:' + owner,
-                    'label:' + label
-                ].join('+')                
+                    'label:' + label,
+                    'state:open'
+                ].join('+')           
             }
 
             if (user != null) {
                 repoOptions.q = [
                     '',
                     'user:' + owner,
-                    'assignee:' + user
+                    'assignee:' + user,
+                    'state:open'
                 ].join('+')
             }
 
