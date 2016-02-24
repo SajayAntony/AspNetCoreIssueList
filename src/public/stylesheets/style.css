@@ -9,3 +9,11 @@ a {
 .label-as-badge {
     border-radius: 1em;
 }
+
+.issue-label{
+    background-color:#eeeeee;
+    color:#666;
+    font-weight: lighter;
+    border:1px solid #cfcfcf;
+    padding:1px;
+}
