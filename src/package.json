@@ -17,6 +17,7 @@
     "promisify-node": "^0.1.5",
     "level":"1.4.0",
     "angular":"1.5.0",
-    "angular-route": "1.5.0"
+    "angular-route": "1.5.0",
+    "bootstrap" :"3.3.6"
   }
 }
