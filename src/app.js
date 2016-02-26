@@ -24,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/scripts/angular', express.static(__dirname + '/node_modules/angular/'));
 app.use('/scripts/angular-route', express.static(__dirname + '/node_modules/angular-route/'));
+app.use('/scripts/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 
 app.use('/', routes);
 app.use('/api/issues', issues);
